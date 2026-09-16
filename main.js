@@ -18,9 +18,9 @@ const ask = (q) => readline.question(q);
  *  - version: the latest version of your product
  */
 const FrostAuthApp = new FrostAuth({
-    owner: "0809wkVP",
-    product: "33abf48a-8e33-4df5-a4bd-d79195704d52",
-    version: "2.0.1"
+    owner: "YOUR-ID",
+    product: "YOUR-PRODUCT-ID",
+    version: "1.0.0"
 });
 
 function fail(err) {
