@@ -1,8 +1,8 @@
-# FrostAuth-JS-Example 🌟
+# FrostAuth-JS-Example SDK
 
 FrostAuth JavaScript example SDK for https://www.frostauth.cc license key API auth.
 
-This is the **reference implementation** — every other SDK port mirrors this
+This is the **reference implementation** every other SDK port mirrors this
 wire behavior. Zero dependencies, Node 18+ (`node:crypto`, `fetch`).
 
 ## Bugs
@@ -18,14 +18,14 @@ then come back.
 ## Security practices
 
 * Ship desktop apps through a protector/packer (pkg/nexe bundle + VMProtect on
-the launcher) and put license checks behind their markers — a plain `.js`
+the launcher) and put license checks behind their markers, a plain `.js`
 next to your exe defeats the point.
 * Run frequent integrity checks so patched memory kills the session instead of
 granting access.
 * Never write a downloaded file to disk if you don't want the user to have it.
 Execute in memory and wipe the buffer the moment you're done.
 * Treat every client answer as advisory. The server re-checks the license on
-each call — don't add a local `isValid` boolean that bypasses it. Match on
+each call and don't add a local `isValid` boolean that bypasses it. Match on
 `errorCode`, never message text.
 
 FrostAuth signs every response and pins the server key, but no API survives a
@@ -44,7 +44,7 @@ enforcement it performs.
 * You may not remove or obscure any licensing, copyright, or attribution
 notices in the SDK files.
 
-Thank you for your compliance — this SDK is a large body of work, and keeping
+Thank you for your compliance. This SDK is a large body of work, and keeping
 the notices intact is what keeps it free.
 
 ## What is FrostAuth?
@@ -80,7 +80,7 @@ into [`example.mjs`](example.mjs):
 
 ```js
 const app = new FrostAuth({
-    owner: "YOUR-OWNER-ID",    // dashboard → product → owner id
+    owner: "YOUR-OWNER-ID",    // dashboard → owner id
     product: "YOUR-PRODUCT-ID",// dashboard → product → product id
     version: "1.0.0",          // must match the version you ship
 });
@@ -232,30 +232,10 @@ const res = await app.webhook("discord", "", '{"content":"Hello from FrostAuth"}
 console.log("upstream:", res.status, "ok:", res.ok);
 ```
 
-## Download file
-
-> Currently disabled server-side (route unmounted). `file()` throws
-> `File downloads are disabled on this server` until file storage ships. The
-> snippet below is the integration pattern for when it lands.
-
-```js
-const blob = await app.file("loader"); // Buffer
-require("fs").writeFileSync("loader.bin", blob);
-```
-
-## Changing username
-
-Lets a signed-in user rename themselves (password re-checked server-side).
-
-```js
-const res = await app.changeUsername(newName, password);
-console.log("Renamed to", res.username);
-```
-
 ## Heartbeat & offline
 
 `validate()` on a timer keeps the session fresh. The SDK caches a signed
-offline assertion — when the network drops, `checkOffline()` verifies it
+offline assertion when the network drops, `checkOffline()` verifies it
 locally so the app keeps working inside the grace window. Events: `init`,
 `activated`, `registered`, `loggedIn`, `validated`, `updateAvailable`,
 `offline`, `invalid`, `needsActivation`, `closed`.
@@ -274,4 +254,4 @@ await app.close();
 ## SDK layout
 
 * `frostauth.js` — the whole SDK (reference implementation, zero deps).
-* `example.mjs` — the interactive demo this README walks through.
+* `main.mjs` — the interactive demo this README walks through.

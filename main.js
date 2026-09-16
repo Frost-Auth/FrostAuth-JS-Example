@@ -33,6 +33,34 @@ function fail(err) {
     }
 }
 
+function showUser(snap) {
+    const license = snap.license ?? {};
+    const account = snap.account ?? {};
+    const device = snap.device ?? {};
+    const product = snap.product ?? {};
+
+    const when = (v) => (v ? new Date(v).toLocaleString() : "—");
+    const expiryDate = license.expiresAt ?? snap.subscriptions?.find((s) => s.expiresAt)?.expiresAt ?? null;
+    const daysLeft = expiryDate ? Math.max(0, Math.ceil((new Date(expiryDate).getTime() - Date.now()) / 86_400_000)) : null;
+
+    const who = snap.user ?? account.username ?? "unknown";
+    const tier = license.tier || "starter";
+    const state = license.status ?? "unknown";
+
+    console.log("");
+    console.log(`Signed in as ${who}`);
+    console.log("----------------------------------------------");
+    console.log(`  Licence ..... ${state} (${tier})`);
+    console.log(`  IP Address .. ${account.lastIp ? `${account.lastIp}` : "—"}`);
+    console.log(`  Product ..... ${product.name ?? "—"}${product.version ? ` v${product.version}` : ""}`);
+    console.log(`  Devices ..... ${license.devicesUsed ?? "—"}${license.unlimitedDevices ? " (unlimited)" : license.deviceLimit ? ` / ${license.deviceLimit}` : ""}`);
+    console.log(`  Valid Until . ${expiryDate ? `${when(expiryDate)} (${daysLeft}d left)` : "never"}`);
+    console.log(`  Device Id ... ${device.id ?? "—"}`);
+    console.log(`  First Seen .. ${when(account.createdAt)}`);
+    console.log(`  Last Seen ... ${when(account.lastLoginAt)}`);
+    console.log("----------------------------------------------");
+}
+
 async function answer() {
     try {
         await FrostAuthApp.init();
@@ -89,23 +117,8 @@ async function answer() {
 
 async function dashboard() {
     try {
-        const appData = await FrostAuthApp.appData().catch(() => null);
         const snap = FrostAuthApp.snapshot();
-
-        console.log(appData)
-
-        console.log("Application data:");
-        console.log("  App Version: ", appData?.product?.version ?? snap.product?.version);
-        console.log("  Customer panel: ", appData?.product ? "enabled" : "unknown");
-        console.log("  Number of Keys: ", appData?.numKeys ?? "unknown");
-        console.log("  Number of Users: ", appData?.numUsers ?? "unknown");
-
-        const online = await FrostAuthApp.fetchOnline().catch(() => null);
-        console.log("  Online Users: ", online?.online ?? "unknown");
-
-        console.log("\nUser data:");
-        console.log("  Username: ", snap.user);
-        console.log("  IP Address: ", snap.account?.lastIp ?? "unknown");
+        showUser(snap);
 
         const subs = snap.subscriptions ?? [];
         for (let i = 0; i < subs.length; i++) {
