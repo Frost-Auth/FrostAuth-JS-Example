@@ -98,8 +98,12 @@ export async function hardwareId(scope = "frostauth") {
 const facet = (value) => createHash("sha256").update(String(value)).digest("hex").slice(0, 32);
 
 const VM_MAC_PREFIXES = [
-    "00:05:69", "00:0c:29", "00:1c:14", "00:50:56",
-    "08:00:27", "0a:00:27",
+    "00:05:69", 
+    "00:0c:29", 
+    "00:1c:14", 
+    "00:50:56",
+    "08:00:27", 
+    "0a:00:27",
     "00:15:5d",
     "00:1c:42",
     "52:54:00",
@@ -244,10 +248,7 @@ function loadOneKey(value, label) {
 
     try {
 
-        const key = String(value).includes("-----BEGIN")
-            ? createPublicKey(String(value))
-            : createPublicKey({ key: Buffer.from(String(value), "base64url"), format: "der", type: "spki" });
-
+        const key = String(value).includes("-----BEGIN") ? createPublicKey(String(value)) : createPublicKey({ key: Buffer.from(String(value), "base64url"), format: "der", type: "spki" });
         if (key.asymmetricKeyType !== "ed25519") throw new FrostAuthError(`${label} is ${key.asymmetricKeyType}, not an Ed25519 public key`, { code: CLIENT_CODES.CONFIG });
 
         return key;
