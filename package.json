@@ -1,0 +1,17 @@
+{
+  "name": "@frostauth/sdk",
+  "version": "1.0.0",
+  "description": "FrostAuth licensing SDK — JavaScript reference implementation",
+  "type": "module",
+  "main": "./frostauth.js",
+  "exports": {
+    ".": "./frostauth.js"
+  },
+  "files": ["frostauth.js", "README.md"],
+  "keywords": ["licensing", "anti-piracy", "drm", "frostauth"],
+  "homepage": "https://www.frostauth.cc",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
