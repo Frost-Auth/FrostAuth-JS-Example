@@ -80,9 +80,9 @@ into [`example.mjs`](example.mjs):
 
 ```js
 const app = new FrostAuth({
-    owner: "YOUR-OWNER-ID",    // dashboard → owner id
-    product: "YOUR-PRODUCT-ID",// dashboard → product → product id
-    version: "1.0.0",          // must match the version you ship
+    owner: "0809y7MP",                                  // dashboard → owner id
+    product: "33abf48a-8e33-4df5-a4bd-d79195704d52",    // dashboard → product → product id
+    version: "1.0.0",                                   // must match the version you ship
 });
 ```
 
@@ -221,7 +221,7 @@ Only works after login. Ends the local session either way.
 await app.ban("debugger detected"); // reason shows on next login + dashboard
 ```
 
-## Server-sided webhooks
+## Server-side webhooks
 
 Fire an operator-configured webhook by id. The destination URL lives on the
 server — the client only supplies params/body, so secrets never ship in your
